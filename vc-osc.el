@@ -173,7 +173,7 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
   (vc-run-delayed
     (vc-osc-after-dir-status callback)))
 
-(defun vc-osc-dir-status-files (dir files default-state callback)
+(defun vc-osc-dir-status-files (dir files callback)
   (apply 'vc-osc-command (current-buffer) 'async nil "status" files)
   (vc-run-delayed
     (vc-osc-after-dir-status callback)))
