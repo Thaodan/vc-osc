@@ -170,13 +170,13 @@ CALLBACK is called as (CALLBACK RESULT BUFFER), where
 RESULT is a list of conses (FILE . STATE) for directory DIR."
   ;; FIXME should this rather be all the files in dir?
   (vc-osc-command (current-buffer) 'async nil "status")
-  (vc-exec-after
-     `(vc-osc-after-dir-status ',callback)))
+  (vc-run-delayed
+    (vc-osc-after-dir-status callback)))
 
 (defun vc-osc-dir-status-files (dir files default-state callback)
   (apply 'vc-osc-command (current-buffer) 'async nil "status" files)
-  (vc-exec-after
-   `(vc-osc-after-dir-status ',callback)))
+  (vc-run-delayed
+    (vc-osc-after-dir-status callback)))
 
 (defvar vc-osc-dir-extra-headers
   '((project    "Project"    "Project name")
