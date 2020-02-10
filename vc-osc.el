@@ -1,4 +1,4 @@
-;;; vc-osc.el --- non-resident support for osc version-control
+;;; vc-osc.el --- non-resident support for osc version-control  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2012 Adam Spiers <aspiers@suse.com>
 
@@ -81,7 +81,7 @@ If t, use no switches."
 ;;; Properties of the backend
 
 (defun vc-osc-revision-granularity () 'repository)
-(defun vc-osc-checkout-model (files) 'implicit)
+(defun vc-osc-checkout-model (_files) 'implicit)
 
 ;;;
 ;;; State-querying functions
@@ -164,7 +164,7 @@ of the given directory."
          (setq result (cons (list filename state) result)))))
     (funcall callback result)))
 
-(defun vc-osc-dir-status (dir callback)
+(defun vc-osc-dir-status (_dir callback)
   "Run 'osc status' for DIR and update BUFFER via CALLBACK.
 CALLBACK is called as (CALLBACK RESULT BUFFER), where
 RESULT is a list of conses (FILE . STATE) for directory DIR."
@@ -173,7 +173,7 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
   (vc-run-delayed
     (vc-osc-after-dir-status callback)))
 
-(defun vc-osc-dir-status-files (dir files callback)
+(defun vc-osc-dir-status-files (_dir files callback)
   (apply 'vc-osc-command (current-buffer) 'async nil "status" files)
   (vc-run-delayed
     (vc-osc-after-dir-status callback)))
@@ -187,15 +187,14 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
     (revision   "Revision"   "Revision"    ))
   "Associative list mapping header symbols to names.")
 
-(defun vc-osc-dir-extra-headers (dir)
+(defun vc-osc-dir-extra-headers (_dir)
   "Generate extra status headers for a osc working copy."
   (let (process-file-side-effects)
     (vc-osc-command "*vc*" 0 nil "info"))
 
   (mapconcat
    (lambda (elt)
-     (let* ((sym    (car elt))
-            (name   (nth 1 elt))
+     (let* ((name   (nth 1 elt))
             (regexp (concat "^" (nth 2 elt) ": *\\(.+\\)"))
             (value  (with-current-buffer "*vc*" (vc-parse-buffer regexp 1))))
        (cond (value
@@ -217,7 +216,7 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
 ;; vc-osc-mode-line-string doesn't exist because the default implementation
 ;; works just fine.
 
-(defun vc-osc-previous-revision (file rev)
+(defun vc-osc-previous-revision (_file rev)
   (let ((newrev (1- (string-to-number rev))))
     (when (< 0 newrev)
       (number-to-string newrev))))
@@ -241,7 +240,7 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
 
 ;; FIXME: support osc mkpac
 
-(defun vc-osc-register (files &optional rev comment)
+(defun vc-osc-register (files &optional _rev _comment)
   "Register FILES into the OSC version-control system.
 The COMMENT argument is ignored  This does an add but not a commit.
 Passes either `vc-osc-register-switches' or `vc-register-switches'
@@ -259,9 +258,9 @@ to the OSC command."
   "Return non-nil if FILE could be registered in OSC.
 This is only possible if OSC is responsible for FILE's directory.")
 
-(defun vc-osc-checkin (files comment &optional _rev)
+(defun vc-osc-checkin (files comment &optional rev)
   "OSC-specific version of `vc-backend-checkin'."
-  (if _rev (error "Committing to a specific revision is unsupported in OSC"))
+  (if rev (error "Committing to a specific revision is unsupported in OSC"))
   (let ((status (apply
                  'vc-osc-command nil 1 files "ci"
                  (nconc (list "-m" comment) (vc-switches 'OSC 'checkin)))))
@@ -307,7 +306,7 @@ This is only possible if OSC is responsible for FILE's directory.")
   (vc-mode-line file 'OSC)
   (message "Checking out %s...done" file))
 
-(defun vc-osc-update (file editable rev switches)
+(defun vc-osc-update (file _editable rev switches)
   (if (and (file-exists-p file) (not rev))
       ;; If no revision was specified, there's nothing to do.
       nil
@@ -384,7 +383,7 @@ This is only possible if OSC is responsible for FILE's directory.")
   (require 'add-log)
   (set (make-local-variable 'log-view-per-file-logs) nil))
 
-(defun vc-osc-print-log (files buffer &optional shortlog start-revision limit)
+(defun vc-osc-print-log (_files buffer &optional shortlog start-revision _limit)
   "Get change log(s) associated with FILES."
   (if shortlog (error "Generating a short log is unsupported in OSC"))
   ;; FIXME: support limiting of log entries.
