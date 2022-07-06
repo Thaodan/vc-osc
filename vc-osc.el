@@ -255,10 +255,6 @@ to the OSC command."
 				 (file-name-directory file)))))
     (and (file-directory-p dir) dir)))
 
-(defalias 'vc-osc-could-register 'vc-osc-responsible-p
-  "Return non-nil if FILE could be registered in OSC.
-This is only possible if OSC is responsible for FILE's directory.")
-
 (defun vc-osc-checkin (files comment &optional rev)
   "OSC-specific version of `vc-backend-checkin'."
   (if rev (error "Committing to a specific revision is unsupported in OSC"))
