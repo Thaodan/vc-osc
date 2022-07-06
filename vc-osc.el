@@ -248,11 +248,12 @@ to the OSC command."
   (apply 'vc-osc-command nil 0 files "add" (vc-switches 'OSC 'register)))
 
 (defun vc-osc-responsible-p (file)
-  "Return non-nil if OSC thinks it is responsible for FILE."
-  (file-directory-p (expand-file-name vc-osc-admin-directory
-				      (if (file-directory-p file)
-					  file
-					(file-name-directory file)))))
+  "Return the directory if OSC thinks it is responsible for FILE."
+  (let ((dir (expand-file-name vc-osc-admin-directory
+			       (if (file-directory-p file)
+				   file
+				 (file-name-directory file)))))
+    (and (file-directory-p dir) dir)))
 
 (defalias 'vc-osc-could-register 'vc-osc-responsible-p
   "Return non-nil if FILE could be registered in OSC.
