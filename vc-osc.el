@@ -215,13 +215,16 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
 ;; vc-osc-mode-line-string doesn't exist because the default implementation
 ;; works just fine.
 
-(defun vc-osc-previous-revision (_file rev)
-  (let ((newrev (1- (string-to-number rev))))
-    (when (< 0 newrev)
-      (number-to-string newrev))))
+(defun vc-osc-previous-revision (_file revision)
+  "Return previous revision of FILE in relation to REVISION."
+  (let ((new-revision (1- (string-to-number revision))))
+    (when (< 0 new-revision)
+      (number-to-string new-revision))))
 
-(defun vc-osc-next-revision (file rev)
-  (let ((newrev (1+ (string-to-number rev))))
+(defun vc-osc-next-revision (file revision)
+  "Return the repository version from which FILE in relation to REVISION.
+If FILE is not registered, this function always returns nil.."
+  (let ((new-revision (1+ (string-to-number revision))))
     ;; The "working revision" is an uneasy conceptual fit under osc;
     ;; we use it as the upper bound until a better idea comes along.  If the
     ;; workfile version W coincides with the tree's latest revision R, then
@@ -229,8 +232,8 @@ RESULT is a list of conses (FILE . STATE) for directory DIR."
     ;; inhibits showing of W+1 through R, which could be considered anywhere
     ;; from gracious to impolite.
     (unless (< (string-to-number (vc-file-getprop file 'vc-working-revision))
-               newrev)
-      (number-to-string newrev))))
+               new-revision)
+      (number-to-string new-revision))))
 
 
 ;;;
