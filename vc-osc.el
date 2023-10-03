@@ -30,8 +30,7 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'vc))
+(require 'vc)
 
 ;; Clear up the cache to force vc-call to check again and discover
 ;; new functions when we reload this file.
