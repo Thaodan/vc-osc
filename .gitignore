@@ -1,0 +1,11 @@
+/config.mk
+/docs/*.html
+/docs/*.info
+/docs/*.pdf
+/docs/*.texi
+/docs/dir
+/docs/stats/
+
+/*-autoloads.el
+/*.elc
+/docs/borg/
