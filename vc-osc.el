@@ -75,7 +75,7 @@ If t, use no switches."
 ;; at dump time.
 ;; ;;;###autoload
 (defconst vc-osc-admin-directory ".osc"
-  "The name of the \".osc\" subdirectory or its equivalent.")
+  "The name of the =\'.osc=\' subdirectory or its equivalent.")
 
 ;;; Properties of the backend
 
@@ -87,7 +87,7 @@ If t, use no switches."
 ;;;
 
 (defun vc-osc-admin-path (dir)
-  "The full path to the \".osc\" subdirectory for the given directory."
+  "The full path to the =\'.osc=\' subdirectory for the given directory."
   (let ((path (expand-file-name vc-osc-admin-directory dir)))
     (or (file-directory-p path)
         (error "%s is not a valid directory" path))
@@ -164,7 +164,7 @@ of the given directory."
     (funcall callback result)))
 
 (defun vc-osc-dir-status (_dir callback)
-  "Run 'osc status' for DIR and update BUFFER via CALLBACK.
+  "Run \='osc status\=' for DIR and update BUFFER via CALLBACK.
 CALLBACK is called as (CALLBACK RESULT BUFFER), where
 RESULT is a list of conses (FILE . STATE) for directory DIR."
   ;; FIXME should this rather be all the files in dir?
@@ -474,7 +474,7 @@ and that it passes `vc-osc-global-switches' to it before FLAGS."
       (match-string 1))))
 
 (defun vc-osc-resolve-when-done ()
-  "Call \"osc resolved\" if the conflict markers have been removed."
+  "Call =\'osc resolved=\' if the conflict markers have been removed."
   (save-excursion
     (goto-char (point-min))
     (unless (re-search-forward "^<<<<<<< " nil t)
@@ -503,7 +503,7 @@ and that it passes `vc-osc-global-switches' to it before FLAGS."
     (message "There are unresolved conflicts in this file")))
 
 (defun vc-osc-parse-status (&optional filename)
-  "Parse output of \"osc status\" command in the current buffer.
+  "Parse output of =\'osc status=\' command in the current buffer.
 Set file properties accordingly.  Unless FILENAME is non-nil, parse only
 information about FILENAME and return its status."
   (let (file status)
